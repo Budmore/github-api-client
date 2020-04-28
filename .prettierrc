@@ -4,7 +4,16 @@
     "singleQuote": true,
     "trailingComma": "all",
     "tabWidth": 4,
-    "useTabs": false,
+    "jsxSingleQuote": true,
+    "jsxBracketSameLine": false,
     "arrowParens": "avoid",
-    "bracketSpacing": true
+    "bracketSpacing": true,
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
 }

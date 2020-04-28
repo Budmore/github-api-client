@@ -1,36 +1,69 @@
 {
-  "extends": ["plugin:react/recommended", "standard", "prettier"],
-  "plugins": ["react"],
-  "settings": {
-    "react": {
-      "pragma": "React",
-      "version": "detect"
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "env": {
+        "browser": true
+    },
+    "plugins": ["@typescript-eslint", "react", "react-hooks"],
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        }
+    },
+    "globals": {
+        "expect": false,
+        "describe": false,
+        "it": false
+    },
+    "rules": {
+        "camelcase": "off",
+        "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "no-console": "error",
+        "no-undef": "error",
+        "no-unused-vars": "error",
+        "object-shorthand": ["error", "always"],
+        "quotes": "off",
+        "arrow-body-style": ["error", "as-needed"],
+        "space-before-function-paren": "off",
+        "import/order": "error",
+        "react/display-name": "off",
+        "react/no-unescaped-entities": "off",
+        "react/prop-types": "off",
+        "react/jsx-no-useless-fragment": ["error"],
+        "react/jsx-boolean-value": ["error", "never"],
+        "react/jsx-no-literals": "off",
+        "react/self-closing-comp": ["error", { "component": true }],
+        "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-member-accessibility": "off",
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/member-delimiter-style": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-magic-numbers": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-object-literal-type-assertion": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "@typescript-eslint/no-type-alias": "off",
+        "@typescript-eslint/no-unnecessary-condition": ["error", { "ignoreRhs": true }],
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/type-annotation-spacing": "off",
+        "@typescript-eslint/typedef": "off",
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/prefer-regexp-exec": "off"
     }
-  },
-  "globals": {
-    "expect": false,
-    "describe": false,
-    "it": false,
-    "fetch": false
-  },
-  "rules": {
-    "camelcase": "off",
-    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
-    "no-console": "error",
-    "no-undef": "error",
-    "no-unused-vars": "error",
-    "object-shorthand": ["error", "always"],
-    "quotes": "off",
-    "arrow-body-style": ["error", "as-needed"],
-    "space-before-function-paren": "off",
-    "import/order": "error",
-    "react/display-name": "off",
-    "react/no-unescaped-entities": "off",
-    "react/prop-types": "off",
-    "react/jsx-no-useless-fragment": ["error"],
-    "react/jsx-boolean-value": ["error", "never"],
-    "react/jsx-no-literals": "off",
-    "react/self-closing-comp": ["error", { "component": true }],
-    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }]
-  }
 }

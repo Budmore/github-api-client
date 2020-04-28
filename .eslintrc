@@ -1,0 +1,36 @@
+{
+  "extends": ["plugin:react/recommended", "standard", "prettier"],
+  "plugins": ["react"],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
+  "globals": {
+    "expect": false,
+    "describe": false,
+    "it": false,
+    "fetch": false
+  },
+  "rules": {
+    "camelcase": "off",
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "no-console": "error",
+    "no-undef": "error",
+    "no-unused-vars": "error",
+    "object-shorthand": ["error", "always"],
+    "quotes": "off",
+    "arrow-body-style": ["error", "as-needed"],
+    "space-before-function-paren": "off",
+    "import/order": "error",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off",
+    "react/jsx-no-useless-fragment": ["error"],
+    "react/jsx-boolean-value": ["error", "never"],
+    "react/jsx-no-literals": "off",
+    "react/self-closing-comp": ["error", { "component": true }],
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }]
+  }
+}

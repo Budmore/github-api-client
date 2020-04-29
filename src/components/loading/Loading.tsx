@@ -15,9 +15,6 @@ const Wrapper = styled.div`
 `;
 
 const Rotating = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
     to {
         transform: rotate(360deg);
     }
@@ -28,8 +25,8 @@ const Spinner = styled.div`
     width: 2rem;
     height: 2rem;
     padding: 0;
-    border-radius: 2rem;
+    border-radius: 50%;
     border-left-color: ${colors.primary.accent};
     background-color: #fff;
-    animation: ${Rotating} 2s linear infinite;
+    animation: ${Rotating} 1s linear infinite;
 `;

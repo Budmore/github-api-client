@@ -10,6 +10,7 @@ import { GITHUB_USER_TOKEN } from '../config';
 import { DetailsView } from './views/DetailsView';
 import { SearchComponent } from './components/search/SearchComponent';
 import { Container } from './components/layout/Container';
+import { GlobalStyle } from './common/styles/globalStyles';
 
 const inMemeryCache = new InMemoryCache();
 const httpLink = new HttpLink({
@@ -27,6 +28,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const Application = () => (
     <ApolloProvider client={client}>
         <BrowserRouter>
+            <GlobalStyle />
             <Container>
                 <SearchComponent />
                 <Switch>

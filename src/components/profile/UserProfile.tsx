@@ -52,5 +52,5 @@ const Name = styled.h3``;
 const Login = styled.h4``;
 
 const Link = styled.a`
-    color: ${colors.primary.link};
+    color: ${colors.primary.accent};
 `;

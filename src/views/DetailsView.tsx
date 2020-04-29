@@ -5,25 +5,32 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Loading } from '../components/loading/Loading';
 import { UserProfile } from '../components/profile/UserProfile';
-import { Reposiotry } from '../components/repository/Repository';
+import { Repository } from '../components/repository/Repository';
 import { Arrow } from '../components/icons/Arrow';
 
 const GET_ACCOUNT_DETAILS = gql`
-    query detailsView($login: String!, $direction: OrderDirection!) {
+    query detailsView($login: String!, $direction: OrderDirection!, $cursor: String) {
         user(login: $login) {
             id
             name
             avatarUrl
             websiteUrl
-            repositories(orderBy: { field: NAME, direction: $direction }, first: 5) {
-                nodes {
-                    name
-                    url
-                    description
-                    primaryLanguage {
+            repositories(orderBy: { field: NAME, direction: $direction }, first: 2, after: $cursor) {
+                edges {
+                    cursor
+                    node {
                         name
-                        color
+                        url
+                        description
+                        primaryLanguage {
+                            name
+                            color
+                        }
                     }
+                }
+                pageInfo {
+                    endCursor
+                    hasNextPage
                 }
             }
         }
@@ -61,8 +68,8 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
     const routeParam: RouteParams = useParams();
     const login = props.login || routeParam.login;
     const [sortConfig, setSortConfig] = useState(DEFAULT_SORT_CONFIG);
-    const { data, loading, error } = useQuery(GET_ACCOUNT_DETAILS, {
-        variables: { login, direction: sortConfig.direction },
+    const { data, loading, error, fetchMore } = useQuery(GET_ACCOUNT_DETAILS, {
+        variables: { login, direction: sortConfig.direction, cursor: null },
     });
 
     const sortDirectionToggle = () => {
@@ -73,26 +80,54 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
         setSortConfig(newSortConfig);
     };
 
+    const loadMoreHandler = () => {
+        fetchMore({
+            query: GET_ACCOUNT_DETAILS,
+            variables: {
+                login,
+                direction: sortConfig.direction,
+                cursor: user.repositories.pageInfo.endCursor,
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+                if (!fetchMoreResult) return prev;
+                const { repositories } = fetchMoreResult.user;
+
+                return {
+                    user: {
+                        ...prev.user,
+                        repositories: {
+                            ...prev.user.repositories,
+                            edges: [...prev.user.repositories.edges, ...repositories.edges],
+                            pageInfo: repositories.pageInfo,
+                        },
+                    },
+                };
+            },
+        });
+    };
+
     if (error) return <p>ERROR: {error.message}</p>;
     if (!data && loading) return <Loading />;
     if (!data) return <p>Not found</p>;
+    const { user } = data;
 
     return (
         <Wrapper>
-            <UserProfile
-                login={login}
-                name={data.user.name}
-                avatarUrl={data.user.avatarUrl}
-                websiteUrl={data.user.websiteUrl}
-            />
+            <UserProfile login={login} name={user.name} avatarUrl={user.avatarUrl} websiteUrl={user.websiteUrl} />
             <List>
                 <SortOrder onClick={sortDirectionToggle}>
                     <Label>{sortConfig.key}</Label>
                     <Arrow isUp={sortConfig.direction === SortDirection.ASC} />
                 </SortOrder>
-                {data.user.repositories.nodes.map((repository, index) => (
-                    <Reposiotry key={index} {...repository} />
+                {user.repositories.edges.map((edge, index) => (
+                    <Repository key={index} {...edge.node} />
                 ))}
+
+                {user.repositories.pageInfo.hasNextPage && (
+                    <LoadMore type='button' disabled={loading} onClick={loadMoreHandler}>
+                        Load More
+                    </LoadMore>
+                )}
             </List>
         </Wrapper>
     );
@@ -108,6 +143,7 @@ const List = styled.ul`
     margin: 0;
     list-style: none;
     box-sizing: border-box;
+    width: 100%;
 `;
 
 const SortOrder = styled.button`
@@ -120,6 +156,8 @@ const SortOrder = styled.button`
     border: none;
     box-shadow: none;
 `;
+
 const Label = styled.div`
     margin-right: 0.5rem;
 `;
+const LoadMore = styled.button``;

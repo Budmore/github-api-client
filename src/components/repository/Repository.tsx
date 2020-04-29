@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../common/styles/variables';
 
-interface ReposiotryProps {
+interface RepositoryProps {
     url: string;
     name: string;
     description?: string;
@@ -12,7 +12,7 @@ interface ReposiotryProps {
     };
 }
 
-export const Reposiotry: React.FunctionComponent<ReposiotryProps> = ({ url, name, description, primaryLanguage }) => (
+export const Repository: React.FunctionComponent<RepositoryProps> = ({ url, name, description, primaryLanguage }) => (
     <Wrapper>
         <TitleLink href={url} title='Link to the repository'>
             {name}

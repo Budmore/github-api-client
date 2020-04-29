@@ -34,7 +34,6 @@
         "quotes": "off",
         "arrow-body-style": ["error", "as-needed"],
         "space-before-function-paren": "off",
-        "import/order": "error",
         "react/display-name": "off",
         "react/no-unescaped-entities": "off",
         "react/prop-types": "off",

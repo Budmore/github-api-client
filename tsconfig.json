@@ -1,7 +1,7 @@
 // prettier-ignore
 {
   "include": [
-    "src/*.tsx",
+    "src/*",
   ],
   
   "compilerOptions": {

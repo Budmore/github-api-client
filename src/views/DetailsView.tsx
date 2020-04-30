@@ -7,6 +7,7 @@ import { Loading } from '../components/loading/Loading';
 import { UserProfile } from '../components/profile/UserProfile';
 import { Repository } from '../components/repository/Repository';
 import { Arrow } from '../components/icons/Arrow';
+import { DetailsViewQueryVariables, DetailsViewQuery, OrderDirection } from '../__generated__/graphql';
 
 const GET_ACCOUNT_DETAILS = gql`
     query detailsView($login: String!, $direction: OrderDirection!, $cursor: String) {
@@ -47,36 +48,34 @@ interface DetailsViewProps {
 
 interface SortConfig {
     key: SortKey;
-    direction: SortDirection;
+    direction: OrderDirection;
 }
 
 enum SortKey {
     Name = 'Name',
 }
 
-enum SortDirection {
-    ASC = 'ASC',
-    DESC = 'DESC',
-}
-
 const DEFAULT_SORT_CONFIG: SortConfig = {
     key: SortKey.Name,
-    direction: SortDirection.DESC,
+    direction: OrderDirection.Asc,
 };
 
 export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
     const routeParam: RouteParams = useParams();
     const login = props.login || routeParam.login;
     const [sortConfig, setSortConfig] = useState(DEFAULT_SORT_CONFIG);
-    const { data, loading, error, fetchMore } = useQuery(GET_ACCOUNT_DETAILS, {
-        variables: { login, direction: sortConfig.direction, cursor: null },
-        notifyOnNetworkStatusChange: true,
-    });
+    const { data, loading, error, fetchMore } = useQuery<DetailsViewQuery, DetailsViewQueryVariables>(
+        GET_ACCOUNT_DETAILS,
+        {
+            variables: { login, direction: sortConfig.direction, cursor: null },
+            notifyOnNetworkStatusChange: true,
+        },
+    );
 
     const sortDirectionToggle = () => {
         const newSortConfig = {
             ...sortConfig,
-            direction: sortConfig.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+            direction: sortConfig.direction === OrderDirection.Asc ? OrderDirection.Desc : OrderDirection.Asc,
         };
         setSortConfig(newSortConfig);
     };
@@ -119,7 +118,7 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
             <List>
                 <SortOrder onClick={sortDirectionToggle}>
                     <Label>{sortConfig.key}</Label>
-                    <Arrow isUp={sortConfig.direction === SortDirection.ASC} />
+                    <Arrow isUp={sortConfig.direction === OrderDirection.Asc} />
                 </SortOrder>
                 {user.repositories.edges.map((edge, index) => (
                     <Repository key={index} {...edge.node} />

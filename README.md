@@ -2,14 +2,13 @@
 
 ## Technology stack:
 
--   [Typescript](https://www.typescriptlang.org/) Typing and compiler
+-   [Typescript](https://www.typescriptlang.org/) JS Typing and compiler
 -   [React JS](https://reactjs.org/) Render library
 -   [Pracel](https://expressjs.com/) Package bundler and simple http server
 -   [eslint](https://lodash.com/) Lint library
 -   [prettier](https://lodash.com/) Code Formatter
-
--   [apollo-client]()
--   [graphql-tag](https://github.com/apollographql/graphql-tag#readme)
+-   [apollo-client](https://www.apollographql.com/docs/react/) GraphQL client
+-   [codegen-graphql](https://github.com/dotansimha/graphql-code-generator) Code generator based on a GraphQL schema
 
 ## Prerequisites
 
@@ -24,5 +23,3 @@
 -   `yarn`
 -   `yarn start`
 -   open a borwser on http://localhost:1234
-
-## TODO:

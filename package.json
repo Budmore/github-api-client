@@ -8,11 +8,20 @@
   "private": true,
   "scripts": {
     "build": "parcel build src/index.html",
+    "start": "parcel src/index.html",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix && tsc --noEmit",
-    "start": "parcel src/index.html"
+    "codegen": "graphql-codegen --config ./codegen.yml",
+    "codegen:watch": "graphql-codegen --config ./codegen.yml --watch"
   },
   "devDependencies": {
-    "@types/react": "^16.9.34",
+    "@graphql-codegen/cli": "1.13.3",
+    "@graphql-codegen/typescript": "1.13.3",
+    "@graphql-codegen/typescript-operations": "1.13.3",
+    "@graphql-codegen/typescript-react-apollo": "1.13.3",
+    "@types/react": "^16.8.0",
+    "@types/react-dom": "^16.9.7",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "eslint": "^6.8.0",
@@ -25,18 +34,17 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@apollo/react-components": "^3.1.5",
+    "@apollo/react-hoc": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
-    "@types/react-dom": "^16.9.7",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/styled-components": "^5.1.0",
     "apollo-cache-inmemory": "^1.6.5",
-    "apollo-client": "^2.6.8",
+    "apollo-client": "^2.6.4",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
-    "graphql": "^15.0.0",
+    "graphql": "^14.3.1",
     "graphql-tag": "^2.10.3",
-    "react": ">=15",
-    "react-dom": "^16.13.1",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "react-router-dom": "^5.1.2",
     "styled-components": "^5.1.0"
   }

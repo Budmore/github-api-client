@@ -7,7 +7,6 @@ const SEARCH_ACCOUNT_BY_LOGIN = gql`
         search(query: $query, type: USER, last: 3) {
             nodes {
                 ... on User {
-                    __typename
                     login
                     name
                     avatarUrl

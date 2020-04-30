@@ -19839,7 +19839,7 @@ export type ViewerHovercardContext = HovercardContext & {
 
 
 export type UserProfileFragmentFragment = (
-  { __typename: 'User' }
+  { __typename?: 'User' }
   & Pick<User, 'login' | 'name' | 'avatarUrl' | 'websiteUrl'>
 );
 
@@ -19863,7 +19863,7 @@ export type SearchQuery = (
     { __typename?: 'SearchResultItemConnection' }
     & Pick<SearchResultItemConnection, 'userCount'>
     & { nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | (
-      { __typename: 'User' }
+      { __typename?: 'User' }
       & Pick<User, 'login' | 'name' | 'avatarUrl'>
     )>>> }
   ) }

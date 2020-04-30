@@ -7,7 +7,6 @@ import { UserProfileFragmentFragment } from '../../generated/graphql';
 
 export const UserProfileFragment = gql`
     fragment UserProfileFragment on User {
-        __typename
         login
         name
         avatarUrl(size: 600)
@@ -34,7 +33,7 @@ const Wrapper = styled.div`
 `;
 
 const Avatar = styled.img<{ avatarUrl?: string }>`
-    width: 300px;
+    max-width: 300px;
     height: 300px;
     background-image: ${props => `url(${props.avatarUrl})`};
     background-position: center;

@@ -7,6 +7,7 @@ import { colors, animation } from '../../common/styles/variables';
 import { SlideInKeyframes } from '../../common/styles/animations';
 import { Loading } from '../../components/loading/Loading';
 import { IconGithub } from '../../components/icons/IconGithub';
+import { ErrorMessage } from '../../components/error-message/ErrorMessage';
 import { useLazySearchQuery } from '../search/useLazySerachQuery';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -49,6 +50,7 @@ export const Search: React.FunctionComponent<SearchProps> = () => {
                 </NavLink>
                 Search for a user
             </Title>
+            {error && <ErrorMessage>{error.message}</ErrorMessage>}
             <InputWrapper>
                 <Input onChange={onChangeHandler} onFocus={onFocusHandler} value={query} placeholder='Start typing' />
                 {query && (
@@ -57,7 +59,6 @@ export const Search: React.FunctionComponent<SearchProps> = () => {
                     </ClearButton>
                 )}
             </InputWrapper>
-            {error && <ErrorDescription>{error.message}</ErrorDescription>}
             {isActive && query && (
                 <>
                     <Backdrop onClick={onBackdropClick} />
@@ -66,20 +67,14 @@ export const Search: React.FunctionComponent<SearchProps> = () => {
 
                         {!loading && data && (
                             <List>
-                                {data.search.nodes.map((node, index) => {
-                                    if (node.__typename !== 'User') {
-                                        return null;
-                                    }
-
-                                    return (
-                                        <Item key={index}>
-                                            <NavLinkCustom to={`/${node.login}`}>
-                                                <AvatarMini src={node.avatarUrl} alt={`Avatar of ${node.name}`} />
-                                                {node.login} {node.name && `- ${node.name}`}
-                                            </NavLinkCustom>
-                                        </Item>
-                                    );
-                                })}
+                                {data.search.nodes.map((node, index) => (
+                                    <Item key={index}>
+                                        <NavLinkCustom to={`/${node.login}`}>
+                                            <AvatarMini src={node.avatarUrl} alt={`Avatar of ${node.name}`} />
+                                            {node.login} {node.name && `- ${node.name}`}
+                                        </NavLinkCustom>
+                                    </Item>
+                                ))}
                             </List>
                         )}
                     </Autocomplete>
@@ -151,11 +146,6 @@ const ClearButton = styled.button`
     &:active {
         color: ${colors.primary.accent};
     }
-`;
-
-const ErrorDescription = styled.p`
-    color: ${colors.status.danger};
-    font-size: 0.75rem;
 `;
 
 const Autocomplete = styled.div`

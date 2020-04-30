@@ -6,11 +6,12 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import { GITHUB_USER_TOKEN } from '../config';
-import { DetailsView } from './views/DetailsView';
-import { SearchComponent } from './components/search/SearchComponent';
+import { Search } from './connected/search/Search';
+import { UserDetails } from './connected/user-details/UserDetails';
 import { Container } from './components/layout/Container';
 import { GlobalStyle } from './common/styles/globalStyles';
+
+const GITHUB_USER_TOKEN = process.env.GITHUB_USER_TOKEN;
 
 const inMemeryCache = new InMemoryCache();
 const httpLink = new HttpLink({
@@ -30,9 +31,9 @@ const Application = () => (
         <BrowserRouter>
             <GlobalStyle />
             <Container>
-                <SearchComponent />
+                <Search />
                 <Switch>
-                    <Route path='/:login' component={DetailsView} />
+                    <Route path='/:userLogin' component={UserDetails} />
                 </Switch>
             </Container>
         </BrowserRouter>

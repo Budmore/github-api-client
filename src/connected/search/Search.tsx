@@ -1,54 +1,27 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 import { useDebounce } from '../../common/hooks/useDebounce';
 import { colors, animation } from '../../common/styles/variables';
-import { Loading } from '../loading/Loading';
 import { SlideInKeyframes } from '../../common/styles/animations';
+import { Loading } from '../../components/loading/Loading';
+import { IconGithub } from '../../components/icons/IconGithub';
+import { useLazySearchQuery } from '../search/useLazySerachQuery';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
-const SEARCH_ACCOUNT_BY_LOGIN = gql`
-    query searchComponent($query: String!) {
-        search(query: $query, type: USER, last: 3) {
-            edges {
-                node {
-                    ... on User {
-                        login
-                        name
-                        avatarUrl
-                    }
-                }
-            }
-            userCount
-        }
-    }
-`;
-
-export interface SearchComponentProps {
+export interface SearchProps {
     runSearch?: (query: string) => void;
 }
 
-export const SearchComponent: React.FunctionComponent<SearchComponentProps> = () => {
+export const Search: React.FunctionComponent<SearchProps> = () => {
     const history = useHistory();
     const [query, setQuery] = useState('');
     const [isActive, setIsActive] = useState(false);
-    const [triggerQuery, { data, loading, error }] = useLazyQuery(SEARCH_ACCOUNT_BY_LOGIN, {
-        variables: { query },
-    });
+    const { data, loading, error, triggerQueryHandler } = useLazySearchQuery({ query });
 
-    useDebounce(
-        () => {
-            if (query) {
-                triggerQuery();
-            }
-        },
-        SEARCH_DEBOUNCE_MS,
-        [query],
-    );
+    useDebounce(triggerQueryHandler, SEARCH_DEBOUNCE_MS, [query]);
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);
@@ -70,7 +43,12 @@ export const SearchComponent: React.FunctionComponent<SearchComponentProps> = ()
 
     return (
         <Wrapper>
-            <h1>Search for a Github user</h1>
+            <Title>
+                <NavLink to='/'>
+                    <IconGithub />
+                </NavLink>
+                Search for a user
+            </Title>
             <InputWrapper>
                 <Input onChange={onChangeHandler} onFocus={onFocusHandler} value={query} placeholder='Start typing' />
                 {query && (
@@ -88,14 +66,20 @@ export const SearchComponent: React.FunctionComponent<SearchComponentProps> = ()
 
                         {!loading && data && (
                             <List>
-                                {data.search.edges.map((edge, index) => (
-                                    <Item key={index}>
-                                        <NavLinkCustom to={`/${edge.node.login}`}>
-                                            <AvatarMini src={edge.node.avatarUrl} alt={`Avatar of ${edge.node.name}`} />
-                                            {edge.node.login} {edge.node.name && `- ${edge.node.name}`}
-                                        </NavLinkCustom>
-                                    </Item>
-                                ))}
+                                {data.search.nodes.map((node, index) => {
+                                    if (node.__typename !== 'User') {
+                                        return null;
+                                    }
+
+                                    return (
+                                        <Item key={index}>
+                                            <NavLinkCustom to={`/${node.login}`}>
+                                                <AvatarMini src={node.avatarUrl} alt={`Avatar of ${node.name}`} />
+                                                {node.login} {node.name && `- ${node.name}`}
+                                            </NavLinkCustom>
+                                        </Item>
+                                    );
+                                })}
                             </List>
                         )}
                     </Autocomplete>
@@ -108,6 +92,16 @@ export const SearchComponent: React.FunctionComponent<SearchComponentProps> = ()
 const Wrapper = styled.div`
     position: relative;
 `;
+
+const Title = styled.h1`
+    display: flex;
+    align-items: center;
+
+    svg {
+        margin-right: 1rem;
+    }
+`;
+
 const Backdrop = styled.div`
     position: fixed;
     top: 0;

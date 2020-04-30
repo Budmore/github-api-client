@@ -1,10 +1,4 @@
-import gql from 'graphql-tag';
-import * as React from 'react';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactComponents from '@apollo/react-components';
-import * as ApolloReactHoc from '@apollo/react-hoc';
 export type Maybe<T> = T | null;
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -19844,22 +19838,33 @@ export type ViewerHovercardContext = HovercardContext & {
 };
 
 
-export type SearchComponentQueryVariables = {
+export type UserProfileFragmentFragment = (
+  { __typename: 'User' }
+  & Pick<User, 'login' | 'name' | 'avatarUrl' | 'websiteUrl'>
+);
+
+export type RepositoryFragmentFragment = (
+  { __typename?: 'Repository' }
+  & Pick<Repository, 'name' | 'url' | 'description'>
+  & { primaryLanguage?: Maybe<(
+    { __typename?: 'Language' }
+    & Pick<Language, 'name' | 'color'>
+  )> }
+);
+
+export type SearchQueryVariables = {
   query: Scalars['String'];
 };
 
 
-export type SearchComponentQuery = (
+export type SearchQuery = (
   { __typename?: 'Query' }
   & { search: (
     { __typename?: 'SearchResultItemConnection' }
     & Pick<SearchResultItemConnection, 'userCount'>
-    & { edges?: Maybe<Array<Maybe<(
-      { __typename?: 'SearchResultItemEdge' }
-      & { node?: Maybe<{ __typename?: 'App' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | (
-        { __typename?: 'User' }
-        & Pick<User, 'login' | 'name' | 'avatarUrl'>
-      )> }
+    & { nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | (
+      { __typename: 'User' }
+      & Pick<User, 'login' | 'name' | 'avatarUrl'>
     )>>> }
   ) }
 );
@@ -19868,6 +19873,7 @@ export type DetailsViewQueryVariables = {
   login: Scalars['String'];
   direction: OrderDirection;
   cursor?: Maybe<Scalars['String']>;
+  listSize: Scalars['Int'];
 };
 
 
@@ -19875,7 +19881,6 @@ export type DetailsViewQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'name' | 'avatarUrl' | 'websiteUrl'>
     & { repositories: (
       { __typename?: 'RepositoryConnection' }
       & { edges?: Maybe<Array<Maybe<(
@@ -19883,102 +19888,13 @@ export type DetailsViewQuery = (
         & Pick<RepositoryEdge, 'cursor'>
         & { node?: Maybe<(
           { __typename?: 'Repository' }
-          & Pick<Repository, 'name' | 'url' | 'description'>
-          & { primaryLanguage?: Maybe<(
-            { __typename?: 'Language' }
-            & Pick<Language, 'name' | 'color'>
-          )> }
+          & RepositoryFragmentFragment
         )> }
       )>>>, pageInfo: (
         { __typename?: 'PageInfo' }
         & Pick<PageInfo, 'endCursor' | 'hasNextPage'>
       ) }
     ) }
+    & UserProfileFragmentFragment
   )> }
 );
-
-
-export const SearchComponentDocument = gql`
-    query searchComponent($query: String!) {
-  search(query: $query, type: USER, last: 3) {
-    edges {
-      node {
-        ... on User {
-          login
-          name
-          avatarUrl
-        }
-      }
-    }
-    userCount
-  }
-}
-    `;
-export type SearchComponentComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SearchComponentQuery, SearchComponentQueryVariables>, 'query'> & ({ variables: SearchComponentQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const SearchComponentComponent = (props: SearchComponentComponentProps) => (
-      <ApolloReactComponents.Query<SearchComponentQuery, SearchComponentQueryVariables> query={SearchComponentDocument} {...props} />
-    );
-    
-export type SearchComponentProps<TChildProps = {}, TDataName extends string = 'data'> = {
-      [key in TDataName]: ApolloReactHoc.DataValue<SearchComponentQuery, SearchComponentQueryVariables>
-    } & TChildProps;
-export function withSearchComponent<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  SearchComponentQuery,
-  SearchComponentQueryVariables,
-  SearchComponentProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withQuery<TProps, SearchComponentQuery, SearchComponentQueryVariables, SearchComponentProps<TChildProps, TDataName>>(SearchComponentDocument, {
-      alias: 'searchComponent',
-      ...operationOptions
-    });
-};
-export type SearchComponentQueryResult = ApolloReactCommon.QueryResult<SearchComponentQuery, SearchComponentQueryVariables>;
-export const DetailsViewDocument = gql`
-    query detailsView($login: String!, $direction: OrderDirection!, $cursor: String) {
-  user(login: $login) {
-    id
-    name
-    avatarUrl
-    websiteUrl
-    repositories(orderBy: {field: NAME, direction: $direction}, first: 2, after: $cursor) {
-      edges {
-        cursor
-        node {
-          name
-          url
-          description
-          primaryLanguage {
-            name
-            color
-          }
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-}
-    `;
-export type DetailsViewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<DetailsViewQuery, DetailsViewQueryVariables>, 'query'> & ({ variables: DetailsViewQueryVariables; skip?: boolean; } | { skip: boolean; });
-
-    export const DetailsViewComponent = (props: DetailsViewComponentProps) => (
-      <ApolloReactComponents.Query<DetailsViewQuery, DetailsViewQueryVariables> query={DetailsViewDocument} {...props} />
-    );
-    
-export type DetailsViewProps<TChildProps = {}, TDataName extends string = 'data'> = {
-      [key in TDataName]: ApolloReactHoc.DataValue<DetailsViewQuery, DetailsViewQueryVariables>
-    } & TChildProps;
-export function withDetailsView<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  DetailsViewQuery,
-  DetailsViewQueryVariables,
-  DetailsViewProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withQuery<TProps, DetailsViewQuery, DetailsViewQueryVariables, DetailsViewProps<TChildProps, TDataName>>(DetailsViewDocument, {
-      alias: 'detailsView',
-      ...operationOptions
-    });
-};
-export type DetailsViewQueryResult = ApolloReactCommon.QueryResult<DetailsViewQuery, DetailsViewQueryVariables>;

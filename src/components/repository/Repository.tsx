@@ -1,18 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import gql from 'graphql-tag';
+
 import { colors } from '../../common/styles/variables';
+import { RepositoryFragmentFragment } from '../../generated/graphql';
 
-interface RepositoryProps {
-    url: string;
-    name: string;
-    description?: string;
-    primaryLanguage: null | {
-        color: string;
-        name: string;
-    };
-}
+export const RepositoryFragment = gql`
+    fragment RepositoryFragment on Repository {
+        name
+        url
+        description
+        primaryLanguage {
+            name
+            color
+        }
+    }
+`;
 
-export const Repository: React.FunctionComponent<RepositoryProps> = ({ url, name, description, primaryLanguage }) => (
+export const Repository: React.FunctionComponent<RepositoryFragmentFragment> = ({
+    url,
+    name,
+    description,
+    primaryLanguage,
+}) => (
     <Wrapper>
         <TitleLink href={url} title='Link to the repository'>
             {name}
@@ -46,7 +56,7 @@ const TitleLink = styled.a`
 
 const Description = styled.p``;
 
-const Dot = styled.div<{ bgColor: string }>`
+const Dot = styled.div<{ bgColor?: string | null }>`
     width: 1rem;
     height: 1rem;
     border-radius: 100%;

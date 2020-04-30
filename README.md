@@ -1,4 +1,6 @@
-# Northshape.com / main website
+# Github API client (v4 GraphQL)
+
+![App preview](src/assets/app-preview.gif)
 
 ## Technology stack:
 
@@ -8,7 +10,6 @@
 -   [eslint](https://lodash.com/) Lint library
 -   [prettier](https://lodash.com/) Code Formatter
 -   [apollo-client](https://www.apollographql.com/docs/react/) GraphQL client
--   [codegen-graphql](https://github.com/dotansimha/graphql-code-generator) Code generator based on a GraphQL schema
 
 ## Prerequisites
 

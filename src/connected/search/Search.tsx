@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
-
 import { useDebounce } from '../../common/hooks/useDebounce';
-import { colors, animation } from '../../common/styles/variables';
-import { SlideInKeyframes } from '../../common/styles/animations';
-import { Loading } from '../../components/loading/Loading';
+import { colors } from '../../common/styles/variables';
 import { IconGithub } from '../../components/icons/IconGithub';
 import { ErrorMessage } from '../../components/error-message/ErrorMessage';
+import { Autocomplete } from '../../components/autocomplete/Autocomplete';
 import { useLazySearchQuery } from '../search/useLazySerachQuery';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
-export interface SearchProps {
-    runSearch?: (query: string) => void;
-}
-
-export const Search: React.FunctionComponent<SearchProps> = () => {
+export const Search: React.FunctionComponent = () => {
     const history = useHistory();
     const [query, setQuery] = useState('');
     const [isActive, setIsActive] = useState(false);
@@ -59,26 +53,11 @@ export const Search: React.FunctionComponent<SearchProps> = () => {
                     </ClearButton>
                 )}
             </InputWrapper>
-            {isActive && query && (
-                <>
-                    <Backdrop onClick={onBackdropClick} />
-                    <Autocomplete>
-                        {loading && <Loading />}
-
-                        {!loading && data && (
-                            <List>
-                                {data.search.nodes.map((node, index) => (
-                                    <Item key={index}>
-                                        <NavLinkCustom to={`/${node.login}`}>
-                                            <AvatarMini src={node.avatarUrl} alt={`Avatar of ${node.name}`} />
-                                            {node.login} {node.name && `- ${node.name}`}
-                                        </NavLinkCustom>
-                                    </Item>
-                                ))}
-                            </List>
-                        )}
-                    </Autocomplete>
-                </>
+            {isActive && query && <Backdrop onClick={onBackdropClick} />}
+            <>
+                <Backdrop onClick={onBackdropClick} />
+                <Autocomplete loading={loading} users={data && data.search.nodes} />
+            </>
             )}
         </Wrapper>
     );
@@ -145,59 +124,5 @@ const ClearButton = styled.button`
     &:hover,
     &:active {
         color: ${colors.primary.accent};
-    }
-`;
-
-const Autocomplete = styled.div`
-    position: absolute;
-    bottom: 0;
-    border-radius: 0.25rem;
-    border: 1px solid ${colors.secondary.greyLvl2};
-    background-color: #fff;
-    padding: 1rem 0;
-    width: 100%;
-    transform: translateY(100%);
-    box-sizing: border-box;
-    z-index: 10;
-`;
-
-const List = styled.ul`
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    animation: ${SlideInKeyframes} 500ms ${animation.cubicBezier} forwards;
-`;
-
-const Item = styled.li`
-    display: flex;
-    margin: 0 0.5rem 0.5rem;
-
-    align-items: center;
-`;
-
-const AvatarMini = styled.img`
-    width: 2rem;
-    height: 2rem;
-    background-color: ${colors.secondary.greyLvl2};
-    border-radius: 0.25rem;
-    margin-right: 1rem;
-`;
-
-const NavLinkCustom = styled(NavLink)`
-    color: ${colors.primary.accent};
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    transition: background-color 300ms ${animation.cubicBezier};
-
-    &:hover {
-        background-color: ${colors.secondary.greyLvl2};
-    }
-
-    &.active {
-        font-weight: bold;
     }
 `;

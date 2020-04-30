@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import gql from 'graphql-tag';
 
 import { colors } from '../../common/styles/variables';
-import { RepositoryFragmentFragment } from '../../generated/graphql';
 
 export const RepositoryFragment = gql`
     fragment RepositoryFragment on Repository {
@@ -17,12 +16,17 @@ export const RepositoryFragment = gql`
     }
 `;
 
-export const Repository: React.FunctionComponent<RepositoryFragmentFragment> = ({
-    url,
-    name,
-    description,
-    primaryLanguage,
-}) => (
+export interface RepositoryProps {
+    name: string;
+    url: string;
+    description?: string;
+    primaryLanguage?: {
+        name: string;
+        color: string;
+    };
+}
+
+export const Repository: React.FunctionComponent<RepositoryProps> = ({ url, name, description, primaryLanguage }) => (
     <Wrapper>
         <TitleLink href={url} title='Link to the repository'>
             {name}

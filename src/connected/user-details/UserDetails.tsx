@@ -5,12 +5,11 @@ import { useParams } from 'react-router-dom';
 import { device } from '../../common/styles/mediaQueries';
 import { colors } from '../../common/styles/variables';
 import { Loading } from '../../components/loading/Loading';
-import { UserProfile } from '../../components/profile/UserProfile';
+import { AccountProfile } from '../../components/account/AccountProfile';
 import { Repository } from '../../components/repository/Repository';
 import { Arrow } from '../../components/icons/Arrow';
-import { OrderDirection } from '../../generated/graphql';
 import { ErrorMessage } from '../../components/error-message/ErrorMessage';
-import { useUserDetailsQuery } from './useUserDetailsQuery';
+import { useUserDetailsQuery, OrderDirection } from './useUserDetailsQuery';
 
 interface RouteParams {
     userLogin: string;
@@ -35,8 +34,9 @@ export const UserDetails: React.FunctionComponent = () => {
 
     const loadMoreHandler = () => {
         fetchMoreHandler({
-            direction: orderDirection,
+            login: userLogin,
             cursor: user.repositories.pageInfo.endCursor,
+            direction: orderDirection,
         });
     };
 
@@ -47,7 +47,12 @@ export const UserDetails: React.FunctionComponent = () => {
 
     return (
         <Wrapper>
-            <UserProfile login={user.login} name={user.name} avatarUrl={user.avatarUrl} websiteUrl={user.websiteUrl} />
+            <AccountProfile
+                login={user.login}
+                name={user.name}
+                avatarUrl={user.avatarUrl}
+                websiteUrl={user.websiteUrl}
+            />
             <List>
                 <Filtes>
                     <SortOrderButton onClick={orderDirectionToggle}>
@@ -132,6 +137,7 @@ const LoadMoreWrapper = styled.div`
 
 const LoadMore = styled.button`
     border: 1px solid ${colors.primary.accent};
+    background-color: transparent;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     font-size: 1rem;

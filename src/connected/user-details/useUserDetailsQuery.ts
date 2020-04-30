@@ -1,14 +1,13 @@
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { UserProfileFragment } from '../../components/profile/UserProfile';
-import { RepositoryFragment } from '../../components/repository/Repository';
-import { DetailsViewQuery, DetailsViewQueryVariables } from '../../generated/graphql';
+import { AccountProfileFragment, AccountProfileProps } from '../../components/account/AccountProfile';
+import { RepositoryFragment, RepositoryProps } from '../../components/repository/Repository';
 
 const LIST_SIZE_DEFAULT = 5;
 const GET_ACCOUNT_DETAILS = gql`
-    query detailsView($login: String!, $direction: OrderDirection!, $cursor: String, $listSize: Int!) {
+    query userDetails($login: String!, $direction: OrderDirection!, $cursor: String, $listSize: Int!) {
         user(login: $login) {
-            ...UserProfileFragment
+            ...AccountProfileFragment
             repositories(orderBy: { field: NAME, direction: $direction }, first: $listSize, after: $cursor) {
                 edges {
                     cursor
@@ -23,12 +22,39 @@ const GET_ACCOUNT_DETAILS = gql`
             }
         }
     }
-    ${UserProfileFragment}
+    ${AccountProfileFragment}
     ${RepositoryFragment}
 `;
 
-export const useUserDetailsQuery = ({ login, direction }) => {
-    const { data, loading, error, fetchMore } = useQuery<DetailsViewQuery, DetailsViewQueryVariables>(
+export enum OrderDirection {
+    Asc = 'Asc',
+    Desc = 'Desc',
+}
+
+export interface UserDetailsQuery {
+    user: AccountProfileProps & {
+        repositories: {
+            edges: {
+                cursor: string;
+                node: RepositoryProps;
+            }[];
+            pageInfo: {
+                endCursor: string;
+                hasNextPage: boolean;
+            };
+        };
+    };
+}
+
+export interface UserDetailsQueryVariables {
+    login: string;
+    direction: OrderDirection;
+    cursor?: string | null;
+    listSize?: number;
+}
+
+export const useUserDetailsQuery = ({ login, direction }: UserDetailsQueryVariables) => {
+    const { data, loading, error, fetchMore } = useQuery<UserDetailsQuery, UserDetailsQueryVariables>(
         GET_ACCOUNT_DETAILS,
         {
             variables: {
@@ -41,7 +67,7 @@ export const useUserDetailsQuery = ({ login, direction }) => {
         },
     );
 
-    const fetchMoreHandler = ({ cursor, direction }) => {
+    const fetchMoreHandler = ({ login, direction, cursor }: UserDetailsQueryVariables) => {
         fetchMore({
             query: GET_ACCOUNT_DETAILS,
             variables: {
@@ -51,17 +77,16 @@ export const useUserDetailsQuery = ({ login, direction }) => {
                 listSize: LIST_SIZE_DEFAULT,
             },
 
-            updateQuery: (prev: DetailsViewQuery, { fetchMoreResult }) => {
+            updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult) return prev;
-                const { repositories } = fetchMoreResult.user;
 
                 return {
                     user: {
                         ...prev.user,
                         repositories: {
                             ...prev.user.repositories,
-                            edges: [...prev.user.repositories.edges, ...repositories.edges],
-                            pageInfo: repositories.pageInfo,
+                            edges: [...prev.user.repositories.edges, ...fetchMoreResult.user.repositories.edges],
+                            pageInfo: fetchMoreResult.user.repositories.pageInfo,
                         },
                     },
                 };

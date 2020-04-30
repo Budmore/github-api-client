@@ -1,21 +1,29 @@
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import { SearchQuery, SearchQueryVariables } from '../../generated/graphql';
+import { AccountPreviewFragment, AccountPreviewProps } from '../../components/account/AccountPreview';
 
 const SEARCH_ACCOUNT_BY_LOGIN = gql`
     query search($query: String!) {
         search(query: $query, type: USER, last: 3) {
             nodes {
-                ... on User {
-                    login
-                    name
-                    avatarUrl
-                }
+                ...AccountPreviewFragment
             }
             userCount
         }
     }
+    ${AccountPreviewFragment}
 `;
+
+export interface SearchQuery {
+    search: {
+        nodes: AccountPreviewProps[];
+        userCount: number;
+    };
+}
+
+export interface SearchQueryVariables {
+    query: string;
+}
 
 export const useLazySearchQuery = ({ query }: SearchQueryVariables) => {
     const [triggerQuery, { data, loading, error }] = useLazyQuery<SearchQuery, SearchQueryVariables>(

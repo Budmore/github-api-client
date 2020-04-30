@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { colors, animation } from '../../common/styles/variables';
 import { SlideInKeyframes } from '../../common/styles/animations';
-import { UserProfileFragmentFragment } from '../../generated/graphql';
 
-export const UserProfileFragment = gql`
-    fragment UserProfileFragment on User {
+export const AccountProfileFragment = gql`
+    fragment AccountProfileFragment on User {
         login
         name
         avatarUrl(size: 600)
@@ -14,7 +13,19 @@ export const UserProfileFragment = gql`
     }
 `;
 
-export const UserProfile = ({ login, name, avatarUrl, websiteUrl }: UserProfileFragmentFragment) => (
+export interface AccountProfileProps {
+    login: string;
+    name?: string;
+    avatarUrl: string;
+    websiteUrl?: string;
+}
+
+export const AccountProfile: React.FunctionComponent<AccountProfileProps> = ({
+    login,
+    name,
+    avatarUrl,
+    websiteUrl,
+}) => (
     <Wrapper>
         <Avatar avatarUrl={avatarUrl} />
         <div>

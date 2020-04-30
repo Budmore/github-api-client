@@ -17,18 +17,18 @@ interface RouteParams {
 
 export const UserDetails: React.FunctionComponent = () => {
     const { userLogin } = useParams<RouteParams>();
-    const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.Asc);
+    const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.ASC);
     const { data, loading, error, fetchMoreHandler } = useUserDetailsQuery({
         login: userLogin,
         direction: orderDirection,
     });
 
-    const isOrderDirectionAsc = orderDirection === OrderDirection.Asc;
+    const isOrderDirectionAsc = orderDirection === OrderDirection.ASC;
     const orderDirectionToggle = () => {
         if (isOrderDirectionAsc) {
-            setOrderDirection(OrderDirection.Desc);
+            setOrderDirection(OrderDirection.DESC);
         } else {
-            setOrderDirection(OrderDirection.Asc);
+            setOrderDirection(OrderDirection.ASC);
         }
     };
 

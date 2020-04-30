@@ -27,8 +27,8 @@ const GET_ACCOUNT_DETAILS = gql`
 `;
 
 export enum OrderDirection {
-    Asc = 'Asc',
-    Desc = 'Desc',
+    ASC = 'ASC',
+    DESC = 'DESC',
 }
 
 export interface UserDetailsQuery {

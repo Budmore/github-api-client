@@ -53,11 +53,11 @@ export const Search: React.FunctionComponent = () => {
                     </ClearButton>
                 )}
             </InputWrapper>
-            {isActive && query && <Backdrop onClick={onBackdropClick} />}
-            <>
-                <Backdrop onClick={onBackdropClick} />
-                <Autocomplete loading={loading} users={data && data.search.nodes} />
-            </>
+            {isActive && query && (
+                <>
+                    <Backdrop onClick={onBackdropClick} />
+                    <Autocomplete loading={loading} users={data && data.search.nodes} />
+                </>
             )}
         </Wrapper>
     );

@@ -70,6 +70,7 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
     const [sortConfig, setSortConfig] = useState(DEFAULT_SORT_CONFIG);
     const { data, loading, error, fetchMore } = useQuery(GET_ACCOUNT_DETAILS, {
         variables: { login, direction: sortConfig.direction, cursor: null },
+        notifyOnNetworkStatusChange: true,
     });
 
     const sortDirectionToggle = () => {
@@ -88,6 +89,7 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
                 direction: sortConfig.direction,
                 cursor: user.repositories.pageInfo.endCursor,
             },
+
             updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult) return prev;
                 const { repositories } = fetchMoreResult.user;
@@ -122,7 +124,7 @@ export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
                 {user.repositories.edges.map((edge, index) => (
                     <Repository key={index} {...edge.node} />
                 ))}
-
+                {loading && <Loading />}
                 {user.repositories.pageInfo.hasNextPage && (
                     <LoadMore type='button' disabled={loading} onClick={loadMoreHandler}>
                         Load More

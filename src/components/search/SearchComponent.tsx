@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import { useDebounce } from '../../common/hooks/useDebounce';
 import { colors, animation } from '../../common/styles/variables';
 import { Loading } from '../loading/Loading';
+import { SlideInKeyframes } from '../../common/styles/animations';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -48,7 +49,8 @@ export const SearchComponent: React.FunctionComponent<SearchComponentProps> = ()
         SEARCH_DEBOUNCE_MS,
         [query],
     );
-    const onChangeHandler = event => {
+
+    const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);
     };
 
@@ -78,13 +80,13 @@ export const SearchComponent: React.FunctionComponent<SearchComponentProps> = ()
                 )}
             </InputWrapper>
             {error && <ErrorDescription>{error.message}</ErrorDescription>}
-            {isActive && data && (
+            {isActive && query && (
                 <>
                     <Backdrop onClick={onBackdropClick} />
                     <Autocomplete>
                         {loading && <Loading />}
 
-                        {!loading && (
+                        {!loading && data && (
                             <List>
                                 {data.search.edges.map((edge, index) => (
                                     <Item key={index}>
@@ -179,6 +181,7 @@ const List = styled.ul`
     margin: 0;
     padding: 0;
     list-style: none;
+    animation: ${SlideInKeyframes} 500ms ${animation.cubicBezier} forwards;
 `;
 
 const Item = styled.li`

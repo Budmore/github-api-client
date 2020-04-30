@@ -56,6 +56,7 @@ const Dot = styled.div<{ bgColor: string }>`
 
 const Summary = styled.div`
     display: flex;
+    align-items: center;
 `;
 
 const ProgramingLanguage = styled.div`

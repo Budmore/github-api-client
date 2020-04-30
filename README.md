@@ -16,7 +16,7 @@
 -   [`nvm`](https://github.com/creationix/nvm#installation)
 -   [`yarn`](https://yarnpkg.com/en/docs/install)
 -   `cp config.example.js config.js` Create config.js
--   [Get your Github User Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) and paste it to the config.js
+-   [Get your Github User Token](https://github.com/settings/tokens) and paste it to the config.js (required scope: ['read:org'])
 
 ## Start development
 

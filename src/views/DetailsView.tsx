@@ -1,29 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Loading } from '../components/loading/Loading';
 import { UserProfile } from '../components/profile/UserProfile';
-import { colors } from '../common/styles/variables';
-// import { Reposiotry } from '../components/repository/Repository';
+import { Repository } from '../components/repository/Repository';
+import { Arrow } from '../components/icons/Arrow';
 
 const GET_ACCOUNT_DETAILS = gql`
-    query detailsView($login: String!) {
+    query detailsView($login: String!, $direction: OrderDirection!, $cursor: String) {
         user(login: $login) {
             id
             name
             avatarUrl
             websiteUrl
-            repositories(last: 10) {
-                nodes {
-                    name
-                    url
-                    description
-                    primaryLanguage {
+            repositories(orderBy: { field: NAME, direction: $direction }, first: 2, after: $cursor) {
+                edges {
+                    cursor
+                    node {
                         name
-                        color
+                        url
+                        description
+                        primaryLanguage {
+                            name
+                            color
+                        }
                     }
+                }
+                pageInfo {
+                    endCursor
+                    hasNextPage
                 }
             }
         }
@@ -38,38 +45,91 @@ interface DetailsViewProps {
     login?: string;
 }
 
+interface SortConfig {
+    key: SortKey;
+    direction: SortDirection;
+}
+
+enum SortKey {
+    Name = 'Name',
+}
+
+enum SortDirection {
+    ASC = 'ASC',
+    DESC = 'DESC',
+}
+
+const DEFAULT_SORT_CONFIG: SortConfig = {
+    key: SortKey.Name,
+    direction: SortDirection.DESC,
+};
+
 export const DetailsView: React.FunctionComponent<DetailsViewProps> = props => {
     const routeParam: RouteParams = useParams();
     const login = props.login || routeParam.login;
-    const { data, loading, error } = useQuery(GET_ACCOUNT_DETAILS, { variables: { login } });
+    const [sortConfig, setSortConfig] = useState(DEFAULT_SORT_CONFIG);
+    const { data, loading, error, fetchMore } = useQuery(GET_ACCOUNT_DETAILS, {
+        variables: { login, direction: sortConfig.direction, cursor: null },
+        notifyOnNetworkStatusChange: true,
+    });
 
-    if (loading) return <Loading />;
+    const sortDirectionToggle = () => {
+        const newSortConfig = {
+            ...sortConfig,
+            direction: sortConfig.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+        };
+        setSortConfig(newSortConfig);
+    };
+
+    const loadMoreHandler = () => {
+        fetchMore({
+            query: GET_ACCOUNT_DETAILS,
+            variables: {
+                login,
+                direction: sortConfig.direction,
+                cursor: user.repositories.pageInfo.endCursor,
+            },
+
+            updateQuery: (prev, { fetchMoreResult }) => {
+                if (!fetchMoreResult) return prev;
+                const { repositories } = fetchMoreResult.user;
+
+                return {
+                    user: {
+                        ...prev.user,
+                        repositories: {
+                            ...prev.user.repositories,
+                            edges: [...prev.user.repositories.edges, ...repositories.edges],
+                            pageInfo: repositories.pageInfo,
+                        },
+                    },
+                };
+            },
+        });
+    };
+
     if (error) return <p>ERROR: {error.message}</p>;
+    if (!data && loading) return <Loading />;
     if (!data) return <p>Not found</p>;
+    const { user } = data;
 
     return (
         <Wrapper>
-            <UserProfile
-                login={login}
-                name={data.user.name}
-                avatarUrl={data.user.avatarUrl}
-                websiteUrl={data.user.websiteUrl}
-            />
+            <UserProfile login={login} name={user.name} avatarUrl={user.avatarUrl} websiteUrl={user.websiteUrl} />
             <List>
-                {data.user.repositories.nodes.map((repository, index) => (
-                    <Item key={index}>
-                        <TitleLink href={repository.url} title='Link to the repository'>
-                            {repository.name} lorem ipsum dolor sita maet asd aydafdasd asdf adsf fasdf
-                        </TitleLink>
-                        <Description>{repository.description}</Description>
-                        {repository.primaryLanguage && (
-                            <Summary>
-                                <Dot bgColor={repository.primaryLanguage.color} />
-                                <ProgramingLanguage>{repository.primaryLanguage.name}</ProgramingLanguage>
-                            </Summary>
-                        )}
-                    </Item>
+                <SortOrder onClick={sortDirectionToggle}>
+                    <Label>{sortConfig.key}</Label>
+                    <Arrow isUp={sortConfig.direction === SortDirection.ASC} />
+                </SortOrder>
+                {user.repositories.edges.map((edge, index) => (
+                    <Repository key={index} {...edge.node} />
                 ))}
+                {loading && <Loading />}
+                {user.repositories.pageInfo.hasNextPage && (
+                    <LoadMore type='button' disabled={loading} onClick={loadMoreHandler}>
+                        Load More
+                    </LoadMore>
+                )}
             </List>
         </Wrapper>
     );
@@ -85,40 +145,21 @@ const List = styled.ul`
     margin: 0;
     list-style: none;
     box-sizing: border-box;
+    width: 100%;
 `;
 
-const Item = styled.li`
-    margin-bottom: 1rem;
-    border: 1px solid #d1d5da;
-    padding: 1rem;
-    border-radius: 0.25rem;
-`;
-
-const TitleLink = styled.a`
-    display: block;
-    color: ${colors.primary.accent};
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
-`;
-
-const Description = styled.p``;
-
-const Dot = styled.div<{ bgColor: string }>`
-    width: 1rem;
-    height: 1rem;
-    border-radius: 100%;
-    margin-right: 0.5rem;
-    background-color: ${props => (props.bgColor ? props.bgColor : colors.secondary.greyLvl1)};
-`;
-
-const Summary = styled.div`
+const SortOrder = styled.button`
     display: flex;
+    align-items: center;
+    height: 1.5rem;
+    padding-left: 0;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: none;
+    box-shadow: none;
 `;
 
-const ProgramingLanguage = styled.div`
-    color: ${colors.primary};
-    font-size: 0.8rem;
+const Label = styled.div`
+    margin-right: 0.5rem;
 `;
+const LoadMore = styled.button``;

@@ -1,6 +1,7 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { colors } from '../../common/styles/variables';
+import { RotateKeyframes } from '../../common/styles/animations';
 
 export const Loading: React.FunctionComponent = () => (
     <Wrapper>
@@ -11,16 +12,7 @@ export const Loading: React.FunctionComponent = () => (
 const Wrapper = styled.div`
     display: flex;
     justify-content: center;
-    padding: 4rem 0;
-`;
-
-const Rotating = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    padding: 2rem 0;
 `;
 
 const Spinner = styled.div`
@@ -28,8 +20,8 @@ const Spinner = styled.div`
     width: 2rem;
     height: 2rem;
     padding: 0;
-    border-radius: 2rem;
+    border-radius: 50%;
     border-left-color: ${colors.primary.accent};
     background-color: #fff;
-    animation: ${Rotating} 2s linear infinite;
+    animation: ${RotateKeyframes} 1s linear infinite;
 `;

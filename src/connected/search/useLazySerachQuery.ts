@@ -25,17 +25,16 @@ export interface SearchQueryVariables {
     query: string;
 }
 
-export const useLazySearchQuery = ({ query }: SearchQueryVariables) => {
+export const useLazySearchQuery = () => {
     const [triggerQuery, { data, loading, error }] = useLazyQuery<SearchQuery, SearchQueryVariables>(
         SEARCH_ACCOUNT_BY_LOGIN,
-        {
-            variables: { query },
-        },
     );
 
-    const triggerQueryHandler = () => {
-        if (query) {
-            triggerQuery();
+    const triggerQueryHandler = (variables: SearchQueryVariables) => {
+        if (variables.query) {
+            triggerQuery({
+                variables,
+            });
         }
     };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Loading } from '../../components/loading/Loading';
 import { AccountPreview, AccountPreviewProps } from '../account/AccountPreview';
-import { colors, animation } from '../../common/styles/variables';
+import { colors, animation } from '../../styles/variables';
 
 interface AutocompleteProps {
     loading: boolean;

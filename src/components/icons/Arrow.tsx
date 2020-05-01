@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { animation } from '../../common/styles/variables';
+import { animation } from '../../styles/variables';
 
 interface ArrowProps {
     isUp?: boolean;

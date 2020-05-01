@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { NavLink } from 'react-router-dom';
-import { colors, animation } from '../../common/styles/variables';
+import { colors, animation } from '../../styles/variables';
 
 export interface AccountPreviewProps {
     login: string;

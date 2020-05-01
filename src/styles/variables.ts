@@ -8,6 +8,7 @@ export const colors = {
         danger: '#FF2E00',
     },
     secondary: {
+        greyLvl0: '#495057',
         greyLvl1: '#ced4da',
         greyLvl2: '#e3e3e3',
     },

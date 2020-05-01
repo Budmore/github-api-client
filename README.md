@@ -6,10 +6,11 @@
 
 -   [Typescript](https://www.typescriptlang.org/) JS Typing and compiler
 -   [React JS](https://reactjs.org/) Render library
+-   [Styled Components](https://styled-components.com/) Component styling
 -   [Pracel](https://expressjs.com/) Package bundler and simple http server
 -   [eslint](https://lodash.com/) Lint library
 -   [prettier](https://lodash.com/) Code Formatter
--   [apollo-client](https://www.apollographql.com/docs/react/) GraphQL client
+-   [apollo-client](https://www.apollographql.com/docs/react/) GraphQL client and Cache library
 
 ## Prerequisites
 

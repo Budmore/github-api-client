@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../common/styles/variables';
-import { RotateKeyframes } from '../../common/styles/animations';
+import { colors } from '../../styles/variables';
+import { RotateKeyframes } from '../../styles/animations';
 
 export const Loading: React.FunctionComponent = () => (
     <Wrapper>

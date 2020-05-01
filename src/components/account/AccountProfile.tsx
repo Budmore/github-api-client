@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-import { colors, animation } from '../../common/styles/variables';
-import { SlideInKeyframes } from '../../common/styles/animations';
+import { colors, animation } from '../../styles/variables';
+import { SlideInKeyframes } from '../../styles/animations';
 
 export const AccountProfileFragment = gql`
     fragment AccountProfileFragment on User {

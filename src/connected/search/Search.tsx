@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useDebounce } from '../../common/hooks/useDebounce';
-import { colors } from '../../common/styles/variables';
+import { useDebounce } from '../../hooks/useDebounce';
+import { colors } from '../../styles/variables';
 import { IconGithub } from '../../components/icons/IconGithub';
 import { ErrorMessage } from '../../components/error-message/ErrorMessage';
 import { Autocomplete } from '../../components/autocomplete/Autocomplete';
@@ -99,10 +99,10 @@ const Input = styled.input`
     height: 3rem;
     padding: 0 1rem;
     font-size: 1rem;
-    color: #495057;
+    color: ${colors.secondary.greyLvl0};
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #ced4da;
+    border: 1px solid ${colors.secondary.greyLvl1};
     border-radius: 0.25rem;
 `;
 

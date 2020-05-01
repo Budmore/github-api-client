@@ -10,7 +10,7 @@
     "build": "parcel build src/index.html",
     "start": "parcel src/index.html",
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
-    "lint:tsc": "tsc --noEmit"
+    "lint:typescript": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/react": "^16.8.0",

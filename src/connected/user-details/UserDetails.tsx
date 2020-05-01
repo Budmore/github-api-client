@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
-import { device } from '../../common/styles/mediaQueries';
-import { colors } from '../../common/styles/variables';
+import { device } from '../../styles/mediaQueries';
+import { colors } from '../../styles/variables';
 import { Loading } from '../../components/loading/Loading';
 import { AccountProfile } from '../../components/account/AccountProfile';
 import { Repository } from '../../components/repository/Repository';

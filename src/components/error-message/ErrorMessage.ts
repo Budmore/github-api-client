@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors } from '../../common/styles/variables';
+import { colors } from '../../styles/variables';
 
 export const ErrorMessage = styled.p`
     color: ${colors.status.danger};

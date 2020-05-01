@@ -10,11 +10,13 @@ export interface AccountPreviewProps {
     name?: string;
 }
 
+const IMAGE_SIZE_SMALL = 100;
+
 export const AccountPreviewFragment = gql`
     fragment AccountPreviewFragment on User {
         login
         name
-        avatarUrl(size: 60)
+        avatarUrl(size: ${IMAGE_SIZE_SMALL})
     }
 `;
 

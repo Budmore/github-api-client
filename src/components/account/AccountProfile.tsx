@@ -1,14 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import gql from 'graphql-tag';
 import { colors, animation } from '../../styles/variables';
-import { SlideInKeyframes } from '../../styles/animations';
+
+const IMAGE_SIZE_BIG = 600;
 
 export const AccountProfileFragment = gql`
     fragment AccountProfileFragment on User {
         login
         name
-        avatarUrl(size: 600)
+        avatarUrl(size: ${IMAGE_SIZE_BIG})
         websiteUrl
     }
 `;
@@ -36,11 +37,22 @@ export const AccountProfile: React.FunctionComponent<AccountProfileProps> = ({
     </Wrapper>
 );
 
+export const SlideIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    animation: ${SlideInKeyframes} 500ms ${animation.cubicBezier} forwards;
+    animation: ${SlideIn} 500ms ${animation.cubicBezier} forwards;
 `;
 
 const Avatar = styled.img<{ avatarUrl?: string }>`

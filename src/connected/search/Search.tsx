@@ -14,9 +14,17 @@ export const Search: React.FunctionComponent = () => {
     const history = useHistory();
     const [query, setQuery] = useState('');
     const [isActive, setIsActive] = useState(false);
-    const { data, loading, error, triggerQueryHandler } = useLazySearchQuery({ query });
+    const { data, loading, error, triggerQueryHandler } = useLazySearchQuery();
 
-    useDebounce(triggerQueryHandler, SEARCH_DEBOUNCE_MS, [query]);
+    useDebounce(
+        () => {
+            triggerQueryHandler({
+                query,
+            });
+        },
+        SEARCH_DEBOUNCE_MS,
+        [query],
+    );
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);

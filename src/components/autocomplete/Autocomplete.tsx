@@ -2,21 +2,25 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Loading } from '../../components/loading/Loading';
 import { AccountPreview, AccountPreviewProps } from '../account/AccountPreview';
-import { colors, animation } from '../../styles/variables';
+import { colors, animation, zIndexes } from '../../styles/variables';
 
 interface AutocompleteProps {
     loading: boolean;
     users?: AccountPreviewProps[];
-    onBackdropClick: () => void;
 }
 
-export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users, onBackdropClick }) => (
-    <>
-        <Backdrop onClick={onBackdropClick} />
-        <Background>
-            {loading && <Loading />}
+export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users }) => {
+    if (loading) {
+        return (
+            <ListWrapper>
+                <Loading />
+            </ListWrapper>
+        );
+    }
 
-            {!loading && users && (
+    return (
+        <ListWrapper>
+            {users && (
                 <List>
                     {users.map((user, index) => (
                         <Item key={index}>
@@ -25,22 +29,11 @@ export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loadi
                     ))}
                 </List>
             )}
-        </Background>
-    </>
-);
+        </ListWrapper>
+    );
+};
 
-const Backdrop = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #000;
-    opacity: 0.2;
-    z-index: 5;
-    height: 100%;
-    width: 100%;
-`;
-
-const Background = styled.div`
+const ListWrapper = styled.div`
     position: absolute;
     bottom: 0;
     border-radius: 0.25rem;
@@ -50,7 +43,7 @@ const Background = styled.div`
     width: 100%;
     transform: translateY(100%);
     box-sizing: border-box;
-    z-index: 10;
+    z-index: ${zIndexes.autocomplete};
 `;
 
 export const SlideIn = keyframes`

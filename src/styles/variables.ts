@@ -1,3 +1,9 @@
+export const zIndexes = {
+    backdrop: 150,
+    search: 200,
+    autocomplete: 200,
+};
+
 export const colors = {
     primary: {
         accent: '#0085ff',

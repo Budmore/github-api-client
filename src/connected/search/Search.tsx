@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
-import { colors } from '../../styles/variables';
+import { colors, zIndexes } from '../../styles/variables';
 import { IconGithub } from '../../components/icons/IconGithub';
 import { ErrorMessage } from '../../components/error-message/ErrorMessage';
 import { Autocomplete } from '../../components/autocomplete/Autocomplete';
@@ -54,7 +54,10 @@ export const Search: React.FunctionComponent = () => {
                 )}
             </InputWrapper>
             {isActive && query && (
-                <Autocomplete loading={loading} onBackdropClick={onBackdropClick} users={data && data.search.nodes} />
+                <>
+                    <Backdrop onClick={onBackdropClick} />
+                    <Autocomplete loading={loading} users={data && data.search.nodes} />
+                </>
             )}
         </Wrapper>
     );
@@ -75,7 +78,7 @@ const Title = styled.h1`
 
 const InputWrapper = styled.div`
     position: relative;
-    z-index: 10;
+    z-index: ${zIndexes.search};
 `;
 
 const Input = styled.input`
@@ -111,4 +114,15 @@ const ClearButton = styled.button`
     &:active {
         color: ${colors.primary.accent};
     }
+`;
+
+const Backdrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    opacity: 0.2;
+    z-index: ${zIndexes.backdrop};
+    height: 100%;
+    width: 100%;
 `;

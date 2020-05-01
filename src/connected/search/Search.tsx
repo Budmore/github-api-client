@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
-import { useDebounce } from '../../common/hooks/useDebounce';
-import { colors } from '../../common/styles/variables';
+import { useDebounce } from '../../hooks/useDebounce';
+import { colors, zIndexes } from '../../styles/variables';
 import { IconGithub } from '../../components/icons/IconGithub';
 import { ErrorMessage } from '../../components/error-message/ErrorMessage';
 import { Autocomplete } from '../../components/autocomplete/Autocomplete';
@@ -76,20 +76,9 @@ const Title = styled.h1`
     }
 `;
 
-const Backdrop = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #000;
-    opacity: 0.2;
-    z-index: 5;
-    height: 100%;
-    width: 100%;
-`;
-
 const InputWrapper = styled.div`
     position: relative;
-    z-index: 10;
+    z-index: ${zIndexes.search};
 `;
 
 const Input = styled.input`
@@ -99,10 +88,10 @@ const Input = styled.input`
     height: 3rem;
     padding: 0 1rem;
     font-size: 1rem;
-    color: #495057;
+    color: ${colors.secondary.greyLvl0};
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #ced4da;
+    border: 1px solid ${colors.secondary.greyLvl1};
     border-radius: 0.25rem;
 `;
 
@@ -125,4 +114,15 @@ const ClearButton = styled.button`
     &:active {
         color: ${colors.primary.accent};
     }
+`;
+
+const Backdrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    opacity: 0.2;
+    z-index: ${zIndexes.backdrop};
+    height: 100%;
+    width: 100%;
 `;

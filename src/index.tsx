@@ -9,7 +9,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Search } from './connected/search/Search';
 import { UserDetails } from './connected/user-details/UserDetails';
 import { Container } from './components/layout/Container';
-import { GlobalStyle } from './common/styles/globalStyles';
+import { GlobalStyle } from './styles/globalStyles';
 
 const GITHUB_USER_TOKEN = process.env.GITHUB_USER_TOKEN;
 

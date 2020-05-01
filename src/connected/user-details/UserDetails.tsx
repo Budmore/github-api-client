@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
-import { device } from '../../common/styles/mediaQueries';
-import { colors } from '../../common/styles/variables';
+import { device } from '../../styles/mediaQueries';
+import { colors } from '../../styles/variables';
 import { Loading } from '../../components/loading/Loading';
 import { AccountProfile } from '../../components/account/AccountProfile';
 import { Repository } from '../../components/repository/Repository';
@@ -117,13 +117,19 @@ const SortOrderButton = styled.button`
     display: flex;
     align-items: center;
 
-    height: 1.5rem;
-    padding-left: 0;
+    height: 2rem;
+    padding: 0.5rem 1rem;
     margin-bottom: 1rem;
     font-size: 1rem;
+    border-radius: 0.25rem;
     border: none;
     background: none;
     box-shadow: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${colors.secondary.greyLvl2};
+    }
 `;
 
 const Label = styled.div`
@@ -141,4 +147,9 @@ const LoadMore = styled.button`
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     font-size: 1rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${colors.secondary.greyLvl2};
+    }
 `;

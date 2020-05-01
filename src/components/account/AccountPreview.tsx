@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { NavLink } from 'react-router-dom';
-import { colors, animation } from '../../common/styles/variables';
+import { colors, animation } from '../../styles/variables';
 
 export interface AccountPreviewProps {
     login: string;
@@ -10,11 +10,13 @@ export interface AccountPreviewProps {
     name?: string;
 }
 
+const IMAGE_SIZE_SMALL = 100;
+
 export const AccountPreviewFragment = gql`
     fragment AccountPreviewFragment on User {
         login
         name
-        avatarUrl(size: 60)
+        avatarUrl(size: ${IMAGE_SIZE_SMALL})
     }
 `;
 

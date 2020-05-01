@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
 
-import { colors } from '../../common/styles/variables';
+import { colors } from '../../styles/variables';
 
 export const RepositoryFragment = gql`
     fragment RepositoryFragment on Repository {

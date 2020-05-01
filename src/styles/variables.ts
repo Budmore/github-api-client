@@ -1,3 +1,9 @@
+export const zIndexes = {
+    backdrop: 150,
+    search: 200,
+    autocomplete: 200,
+};
+
 export const colors = {
     primary: {
         accent: '#0085ff',
@@ -8,6 +14,7 @@ export const colors = {
         danger: '#FF2E00',
     },
     secondary: {
+        greyLvl0: '#495057',
         greyLvl1: '#ced4da',
         greyLvl2: '#e3e3e3',
     },

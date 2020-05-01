@@ -2,30 +2,38 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Loading } from '../../components/loading/Loading';
 import { AccountPreview, AccountPreviewProps } from '../account/AccountPreview';
-import { colors, animation } from '../../common/styles/variables';
+import { colors, animation, zIndexes } from '../../styles/variables';
 
 interface AutocompleteProps {
     loading: boolean;
     users?: AccountPreviewProps[];
 }
 
-export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users }) => (
-    <Wrapper>
-        {loading && <Loading />}
+export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users }) => {
+    if (loading) {
+        return (
+            <ListWrapper>
+                <Loading />
+            </ListWrapper>
+        );
+    }
 
-        {!loading && users && (
-            <List>
-                {users.map((user, index) => (
-                    <Item key={index}>
-                        <AccountPreview login={user.login} avatarUrl={user.avatarUrl} name={user.name} />
-                    </Item>
-                ))}
-            </List>
-        )}
-    </Wrapper>
-);
+    return (
+        <ListWrapper>
+            {users && (
+                <List>
+                    {users.map((user, index) => (
+                        <Item key={index}>
+                            <AccountPreview login={user.login} avatarUrl={user.avatarUrl} name={user.name} />
+                        </Item>
+                    ))}
+                </List>
+            )}
+        </ListWrapper>
+    );
+};
 
-const Wrapper = styled.div`
+const ListWrapper = styled.div`
     position: absolute;
     bottom: 0;
     border-radius: 0.25rem;
@@ -35,7 +43,7 @@ const Wrapper = styled.div`
     width: 100%;
     transform: translateY(100%);
     box-sizing: border-box;
-    z-index: 10;
+    z-index: ${zIndexes.autocomplete};
 `;
 
 export const SlideIn = keyframes`

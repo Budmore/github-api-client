@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { device } from '../../common/styles/mediaQueries';
+import { device } from '../../styles/mediaQueries';
 
 interface ContainerProps {
     children: React.ReactNode;

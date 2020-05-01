@@ -10,7 +10,8 @@
         "project": "./tsconfig.json"
     },
     "env": {
-        "browser": true
+        "browser": true,
+        "node": true
     },
     "plugins": ["@typescript-eslint", "react", "react-hooks"],
     "settings": {

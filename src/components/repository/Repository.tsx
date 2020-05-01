@@ -1,14 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import gql from 'graphql-tag';
+
 import { colors } from '../../common/styles/variables';
 
-interface RepositoryProps {
-    url: string;
+export const RepositoryFragment = gql`
+    fragment RepositoryFragment on Repository {
+        name
+        url
+        description
+        primaryLanguage {
+            name
+            color
+        }
+    }
+`;
+
+export interface RepositoryProps {
     name: string;
+    url: string;
     description?: string;
-    primaryLanguage: null | {
-        color: string;
+    primaryLanguage?: {
         name: string;
+        color: string;
     };
 }
 
@@ -46,7 +60,7 @@ const TitleLink = styled.a`
 
 const Description = styled.p``;
 
-const Dot = styled.div<{ bgColor: string }>`
+const Dot = styled.div<{ bgColor?: string | null }>`
     width: 1rem;
     height: 1rem;
     border-radius: 100%;

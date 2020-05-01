@@ -54,10 +54,7 @@ export const Search: React.FunctionComponent = () => {
                 )}
             </InputWrapper>
             {isActive && query && (
-                <>
-                    <Backdrop onClick={onBackdropClick} />
-                    <Autocomplete loading={loading} users={data && data.search.nodes} />
-                </>
+                <Autocomplete loading={loading} onBackdropClick={onBackdropClick} users={data && data.search.nodes} />
             )}
         </Wrapper>
     );
@@ -74,17 +71,6 @@ const Title = styled.h1`
     svg {
         margin-right: 1rem;
     }
-`;
-
-const Backdrop = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #000;
-    opacity: 0.2;
-    z-index: 5;
-    height: 100%;
-    width: 100%;
 `;
 
 const InputWrapper = styled.div`

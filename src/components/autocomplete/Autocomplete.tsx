@@ -7,25 +7,40 @@ import { colors, animation } from '../../styles/variables';
 interface AutocompleteProps {
     loading: boolean;
     users?: AccountPreviewProps[];
+    onBackdropClick: () => void;
 }
 
-export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users }) => (
-    <Wrapper>
-        {loading && <Loading />}
+export const Autocomplete: React.FunctionComponent<AutocompleteProps> = ({ loading, users, onBackdropClick }) => (
+    <>
+        <Backdrop onClick={onBackdropClick} />
+        <Background>
+            {loading && <Loading />}
 
-        {!loading && users && (
-            <List>
-                {users.map((user, index) => (
-                    <Item key={index}>
-                        <AccountPreview login={user.login} avatarUrl={user.avatarUrl} name={user.name} />
-                    </Item>
-                ))}
-            </List>
-        )}
-    </Wrapper>
+            {!loading && users && (
+                <List>
+                    {users.map((user, index) => (
+                        <Item key={index}>
+                            <AccountPreview login={user.login} avatarUrl={user.avatarUrl} name={user.name} />
+                        </Item>
+                    ))}
+                </List>
+            )}
+        </Background>
+    </>
 );
 
-const Wrapper = styled.div`
+const Backdrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    opacity: 0.2;
+    z-index: 5;
+    height: 100%;
+    width: 100%;
+`;
+
+const Background = styled.div`
     position: absolute;
     bottom: 0;
     border-radius: 0.25rem;
